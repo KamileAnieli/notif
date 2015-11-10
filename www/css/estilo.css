@@ -1,0 +1,46 @@
+h2{
+	color:#B22222;
+}
+
+h1{
+	color:#FF4500;
+}
+
+.lista-tarefas{
+	text-align: center;
+	padding:5px;
+}
+
+.listaTarefas{
+	text-align: left;
+}
+
+.listaTarefas li{
+	list-style-type: none;
+}
+
+.nova-tarefa{
+	text-align: center;
+	padding:5px;
+}
+
+.group {
+	margin:10px;
+}
+
+.btn{
+	border:2px #FFE4B5 solid;
+	border-radius:5px;
+}
+
+.salvar{
+	background-color: #FFDAB9;
+}
+
+.excluir{
+	color:#FF4500;
+}
+
+footer{
+	text-align: center;
+}
