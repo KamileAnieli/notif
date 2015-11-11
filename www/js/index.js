@@ -7,17 +7,7 @@
         }catch(e){
             alert('Mensagem:'+e);
         }
-
-        //NOTIFICAÇÕES
-        var push = PushNotification.init({ 
-        "android": {"senderID": "111111111"}, 
-            "ios": {},
-            "windows": {} 
-         });
-
-        push.on('notification', function(data) {
-            data.title = 'Alerta';
-        });
+        navigator.vibrate(3000);
     };
 
     //lista todas as tarefas       
