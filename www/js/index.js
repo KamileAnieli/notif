@@ -7,6 +7,18 @@
         }catch(e){
             alert('Mensagem:'+e);
         }
+        //NOTIFICAÇÕES
+        alert('ola1');
+        var push = PushNotification.init({ 
+        "android": { 
+            "senderID": "123456789", "icon": "phonegap", "iconColor": "blue"}, 
+            "ios": {"alert": "true", "badge": "true", "sound": "true"},
+            "windows": {} 
+         });
+        alert('ola3');
+        push.on('notification', function(data) {
+             alert('ola4');
+        });
     };
 
     //lista todas as tarefas       
@@ -77,15 +89,21 @@
             buscaTarefas();
         }
 
+        function sair(){
+            navigator.notification.confirm(
+                'Você tem certeza que deseja sair da aplicação?', 
+                 exittApp,           
+                'Sair',          
+                ['Sair','Cancelar']     
+            );
+        }
 
-        //NOTIFICAÇÕES
-        var push = PushNotification.init({ 
+        function exittApp(button){
+            if (button == 1){
+                navigator.app.exitApp();
+            }
+        }
         
-        "android": { 
-            "senderID": "123456789", "icon": "phonegap", "iconColor": "blue"}, 
-        
-        "ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} 
-         });
 
         function errorCB(err) {
             alert("ErrorCB: "+err);
