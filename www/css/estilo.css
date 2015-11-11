@@ -1,3 +1,7 @@
+body{
+	text-align: center;
+}
+
 h2{
 	color:#B22222;
 }
@@ -39,6 +43,12 @@ h1{
 
 .excluir{
 	color:#FF4500;
+}
+
+.sair{
+	width: 40%;
+	background-color:#DDA0DD;
+	color:#fff;
 }
 
 footer{

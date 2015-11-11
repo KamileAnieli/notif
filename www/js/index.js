@@ -7,17 +7,16 @@
         }catch(e){
             alert('Mensagem:'+e);
         }
+
         //NOTIFICAÇÕES
-        alert('ola1');
         var push = PushNotification.init({ 
-        "android": { 
-            "senderID": "123456789", "icon": "phonegap", "iconColor": "blue"}, 
-            "ios": {"alert": "true", "badge": "true", "sound": "true"},
+        "android": {"senderID": "111111111"}, 
+            "ios": {},
             "windows": {} 
          });
-        alert('ola3');
+
         push.on('notification', function(data) {
-             alert('ola4');
+            data.title = 'Alerta';
         });
     };
 
