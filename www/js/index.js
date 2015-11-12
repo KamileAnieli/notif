@@ -2,7 +2,7 @@
     var db;
     function onDeviceReady() {
         try{
-            db = window.openDatabase("agenda", "1.0", "Agenda",2 * 1024 * 1024);
+            db = window.openDatabase("agendas", "1.0", "Agenda",2 * 1024 * 1024);
             //alert('Banco criado com sucesso!');
         }catch(e){
             alert('Mensagem:'+e);
@@ -17,14 +17,13 @@
 
         function salvarAgenda(tx) {
             var name = new String(document.getElementById('nome').value); 
-            var foto = new String(document.getElementById('foto').value);
-            var dataB = new String(document.getElementById('aniversario').value);        
+            var aniversario = new String(document.getElementById('aniversario').value);        
             try{
-                tx.executeSql('CREATE TABLE IF NOT EXISTS aniversario (id integer primary key autoincrement,nome varchar, foto text, aniver varchar)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS aniversario (id integer primary key autoincrement,nome varchar, aniver varchar)');
                 if (name == "" ){
                     alert('Confira se há algum campo nulo!');                
                 } else{
-                    tx.executeSql('INSERT INTO aniversario (nome,foto,aniver) VALUES ("'+name+'","'+foto+'","'+aniversario+'")');
+                    tx.executeSql('INSERT INTO aniversario (nome,aniver) VALUES ("'+name+'","'+aniversario+'")');
                     alert('Aniversario inserido com sucesso!');
                     window.location = "index.html";
                 } 
@@ -34,13 +33,20 @@
         }
 
          //lista todas as agenda       
-        function carregarAgenda() {                 
+        function carregarAgenda() { 
+            buscaAniversario();            
+            var listarTodaAgenda = localStorage.getItem("listarAniversario");
+            //alert(listarTodasTarefas);
+            document.getElementById("listarAniversario").innerHTML = listarTodaAgenda;
+            
+        };
+
+        function verTodos(){
             buscaAgenda();            
             var listarTodaAgenda = localStorage.getItem("listarAgenda");
             //alert(listarTodasTarefas);
             document.getElementById("listarAgenda").innerHTML = listarTodaAgenda;
-            
-        };
+        }
         //LISTAR AGENDA
         function buscaAgenda() {
             db.transaction(function (tx){
@@ -54,33 +60,39 @@
             for (var i=0; i<len; i++){
                 var row = results.rows.item(i); 
                 listarAgenda += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
-                listarAgenda +=  row.nome +"</li><li>Foto=> "+row.foto+"</li><li>Aniversário=> "+row.aniversario+" </li>";
+                listarAgenda +=  row.nome +"</li><li>Aniversário=> "+row.aniver+" </li>";
                 listarAgenda += "<li><a onclick='excluirAgenda("+row.id+");'class='excluir'>Excluir</a></li></ul></p>";
             }             
             localStorage.setItem('listarAgenda',listarAgenda);           
         }
 
         //LISTAR ANIVERSARIANTES DO DIA
-        function verTodos(){
-            window.location = "agenda.html";
-        }
+        
 
         function buscaAniversario() {
             db.transaction(function (tx){
-                tx.executeSql('SELECT * FROM aniversario ORDER BY nome asc;', [], agenda, errorCB);
+                tx.executeSql('SELECT * FROM aniversario ORDER BY nome asc;', [], aniversario, errorCB);
             });
-        }
-        
+        }        
         function aniversario(tx, results) {
             var len = results.rows.length;
             var listarAniversario = '';            
             for (var i=0; i<len; i++){
                 var row = results.rows.item(i); 
-                listarAniversario += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
-                listarAniversario +=  row.nome +"</li><li>Foto=> "+row.foto+"</li><li>Aniversário=> "+row.aniversario+" </li>>";
-                listarAniversario += "</ul></p>";
+                var atual = new Date();
+                var dia = atual.getDate();
+                var mes = atual.getMonth()+1;
+                var aniver = new Date(row.aniver);
+                var diaA = aniver.getDate();
+                var mesA = aniver.getMonth()+1;
+                
+                if ((dia == diaA) && (mes == mesA)){
+                    listarAniversario += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
+                    listarAniversario +=  row.nome +"</li><li>Aniversário=> "+row.aniver+" </li>>";
+                    listarAniversario += "</ul></p>";
+                }
             }             
-            localStorage.setItem('listarAniversario',listarAgenda);           
+            localStorage.setItem('listarAniversario',listarAniversario);           
         }
 
         //EXCLUIR ANIVERSARIO
@@ -117,20 +129,21 @@
             alert("Executado com sucesso!");
         }
 
-        //CAPTURAR FOTO DA ÁRVORE
-    function captureFoto() {
-        var destinationType = navigator.camera.DestinationType;
-        navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, saveToPhotoAlbum:true,
-            destinationType: destinationType.NATIVE_URL });
-    }
-
-    function onPhotoDataSuccess(imageData) {
-      var smallImage = document.getElementById('smallImage');
-      smallImage.style.display = 'block';
-      smallImage.src = imageData;
-      localStorage.setItem('foto',imageData);
-    }
-
-    function onFail(message) {
-      alert('Failed because: ' + message);
+         <!-- //GEOLOCALIZAÇÃO -->
+    function coordenadas(){ 
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            function onSuccess(position) {
+                localStorage.setItem('latitude',position.coords.latitude);
+                localStorage.setItem('longitude',position.coords.longitude);
+                
+            }
+            function onError(error) {
+                alert('code: '    + error.code    + '\n' +
+                        'message: ' + error.message + '\n');
+            }
+        
+        var latitude = localStorage.getItem('latitude');
+        var longitude = localStorage.getItem('longitude');  
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
     }
