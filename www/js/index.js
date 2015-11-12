@@ -2,80 +2,102 @@
     var db;
     function onDeviceReady() {
         try{
-            db = window.openDatabase("tarefas", "1.0", "Tarefas",2 * 1024 * 1024);
+            db = window.openDatabase("agenda", "1.0", "Agenda",2 * 1024 * 1024);
             //alert('Banco criado com sucesso!');
         }catch(e){
             alert('Mensagem:'+e);
         }
-        navigator.vibrate(3000);
     };
 
-    //lista todas as tarefas       
-        function carregarTarefas() {                 
-            buscaTarefas();            
-            var listarTodasTarefas = localStorage.getItem("listarTarefas");
-            //alert(listarTodasTarefas);
-            document.getElementById("listar_tarefas").innerHTML = listarTodasTarefas;
-            
-        };
 
-        //ADD PROJETO NOVO
-        function addTarefa() {            
-            db.transaction(salvarTarefa, errorCB, successCB);
+        //ADD AGENDA NOVA
+        function addAgenda() {            
+            db.transaction(salvarAgenda, errorCB, successCB);
         }
 
-        function salvarTarefa(tx) {
-            var nameTarefa = new String(document.getElementById('nomeTarefa').value); 
-            var descTarefa = new String(document.getElementById('descTarefa').value);
-            var atual = new Date();
-            var dia = atual.getDate();
-            var mes = atual.getMonth()+1;
-            var ano = atual.getFullYear();
-            var dataA = ano+'/'+mes+'/'+dia;
-            var dataB = new String(document.getElementById('dataA').value);        
+        function salvarAgenda(tx) {
+            var name = new String(document.getElementById('nome').value); 
+            var foto = new String(document.getElementById('foto').value);
+            var dataB = new String(document.getElementById('aniversario').value);        
             try{
-                tx.executeSql('CREATE TABLE IF NOT EXISTS tarefas (id integer primary key autoincrement,nome varchar, tarefa text, dateA varchar,dateB varchar)');
-                if (nameTarefa == "" ){
-                    alert('Confira se ha algum campo nulo!');                
+                tx.executeSql('CREATE TABLE IF NOT EXISTS aniversario (id integer primary key autoincrement,nome varchar, foto text, aniver varchar)');
+                if (name == "" ){
+                    alert('Confira se há algum campo nulo!');                
                 } else{
-                    tx.executeSql('INSERT INTO tarefas (nome,tarefa,dateA,dateB) VALUES ("'+nameTarefa+'","'+descTarefa+'","'+dataA+'","'+dataB+'")');
-                    alert('Tarefa inserida com sucesso!');
-                    buscaTarefas();
+                    tx.executeSql('INSERT INTO aniversario (nome,foto,aniver) VALUES ("'+name+'","'+foto+'","'+aniversario+'")');
+                    alert('Aniversario inserido com sucesso!');
+                    window.location = "index.html";
                 } 
             }catch(e){
                 alert("Mensagem de erro: "+e);
             }           
         }
 
-        //LISTAR PROJETOS
-        function buscaTarefas() {
-            var atual = new Date();
-            var dia = atual.getDate();
-            var mes = atual.getMonth()+1;
-            var ano = atual.getFullYear();
-            var dataA = ano+'/'+mes+'/'+dia;
+         //lista todas as agenda       
+        function carregarAgenda() {                 
+            buscaAgenda();            
+            var listarTodaAgenda = localStorage.getItem("listarAgenda");
+            //alert(listarTodasTarefas);
+            document.getElementById("listarAgenda").innerHTML = listarTodaAgenda;
+            
+        };
+        //LISTAR AGENDA
+        function buscaAgenda() {
             db.transaction(function (tx){
-                tx.executeSql('SELECT * FROM tarefas WHERE dateB >= ?  ORDER BY dateB asc;', [dataA], tarefa, errorCB);
+                tx.executeSql('SELECT * FROM aniversario ORDER BY nome asc;', [], agenda, errorCB);
             });
         }
         
-        function tarefa(tx, results) {
+        function agenda(tx, results) {
             var len = results.rows.length;
-            var listarTarefas = '';            
+            var listarAgenda = '';            
             for (var i=0; i<len; i++){
                 var row = results.rows.item(i); 
-                listarTarefas += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
-                listarTarefas +=  row.nome +"</li><li>Tarefa=> "+row.tarefa+"</li><li>Data de Cadastro=> "+row.dateA+" </li><li>Data de Validade=> "+row.dateB+"</li>";
-                listarTarefas += "<li><a onclick='excluirTarefa("+row.id+");'class='excluir'>Excluir</a></li></ul></p>";
+                listarAgenda += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
+                listarAgenda +=  row.nome +"</li><li>Foto=> "+row.foto+"</li><li>Aniversário=> "+row.aniversario+" </li>";
+                listarAgenda += "<li><a onclick='excluirAgenda("+row.id+");'class='excluir'>Excluir</a></li></ul></p>";
             }             
-            localStorage.setItem('listarTarefas',listarTarefas);           
+            localStorage.setItem('listarAgenda',listarAgenda);           
         }
 
-        function excluirTarefa(id){
+        //LISTAR ANIVERSARIANTES DO DIA
+        function verTodos(){
+            window.location = "agenda.html";
+        }
+
+        function buscaAniversario() {
             db.transaction(function (tx){
-                tx.executeSql('DELETE FROM tarefas WHERE id = ?', [id]);               
+                tx.executeSql('SELECT * FROM aniversario ORDER BY nome asc;', [], agenda, errorCB);
             });
-            buscaTarefas();
+        }
+        
+        function aniversario(tx, results) {
+            var len = results.rows.length;
+            var listarAniversario = '';            
+            for (var i=0; i<len; i++){
+                var row = results.rows.item(i); 
+                listarAniversario += "<p> <ul class='listaTarefas'> <li>Nome=> "; 
+                listarAniversario +=  row.nome +"</li><li>Foto=> "+row.foto+"</li><li>Aniversário=> "+row.aniversario+" </li>>";
+                listarAniversario += "</ul></p>";
+            }             
+            localStorage.setItem('listarAniversario',listarAgenda);           
+        }
+
+        //EXCLUIR ANIVERSARIO
+
+        function excluirAgenda(id){
+            db.transaction(function (tx){
+                tx.executeSql('DELETE FROM aniversario WHERE id = ?', [id]);               
+            });
+            buscaAgenda();
+        }
+
+        function pagAdd(){
+            window.location = 'teste.html';  
+        }
+
+        function voltar(){
+            window.location = 'index.html';  
         }
 
         function sair(){
@@ -85,14 +107,7 @@
                 'Sair',          
                 ['Sair','Cancelar']     
             );
-        }
-
-        function exittApp(button){
-            if (button == 1){
-                navigator.app.exitApp();
-            }
-        }
-        
+        }  
 
         function errorCB(err) {
             alert("ErrorCB: "+err);
@@ -101,3 +116,21 @@
         function successCB() {
             alert("Executado com sucesso!");
         }
+
+        //CAPTURAR FOTO DA ÁRVORE
+    function captureFoto() {
+        var destinationType = navigator.camera.DestinationType;
+        navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, saveToPhotoAlbum:true,
+            destinationType: destinationType.NATIVE_URL });
+    }
+
+    function onPhotoDataSuccess(imageData) {
+      var smallImage = document.getElementById('smallImage');
+      smallImage.style.display = 'block';
+      smallImage.src = imageData;
+      localStorage.setItem('foto',imageData);
+    }
+
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }

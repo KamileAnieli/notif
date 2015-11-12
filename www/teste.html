@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/estilo.css">
+        <title></title>
+    </head>
+    <body onload="onDeviceReady();">
+
+    <header>
+        <h1> agenda</h1>
+    </header>
+
+    <section class='nova-tarefa'>
+        <h2>Adicionar novo Aniversário:</h2>
+        <form id="addAgenda">
+            <div class="group">
+                <label for="nome" class='label'>Nome:</label><br>
+                <input type="text" id="nome" name='nome' autofocus>
+            </div>
+            <div class="group">
+            <label for="foto"></label>
+            <button onclick="captureFoto();">Foto</button>
+            <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+            </div>
+            
+            <!-- coordenadas 
+            <input type="hidden" name="latitude" id="latitude"  value="">
+            <input type="hidden" name="longitude" id="longitude" value="">-->
+            <div class="group">
+                <label for="aniversario" class='label'>Aniversário:</label><br>
+                <input type="text" id="aniversario" name='aniversario'>
+            </div>
+            <button onclick="addAgenda();" class='btn salvar'>Salvar</button>
+        </form>
+    </section>
+
+    <br><br>
+    <button onclick="voltar();" class="btn">Voltar</button>
+    <footer>
+        Phonegap-2019
+    </footer>
+        
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>   
+</html>

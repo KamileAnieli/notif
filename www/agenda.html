@@ -13,24 +13,20 @@
         <link rel="stylesheet" type="text/css" href="css/estilo.css">
         <title></title>
     </head>
-    <body onload="onDeviceReady();carregarAgenda();">
+    <body onload="onDeviceReady();buscaAniversario();">
 
     <header>
         <h1>agenda</h1> 
     </header>
 
-    <button onclick="pagAdd();" class="btn add">Adicionar novo aniversário</button>
-    <button onclick="verTodos();" class="btn add">Agenda</button>
-
     <section class='lista-tarefas'>
-        <h2>Aniversariantes do Dia!</h2>
-        <button onclick="carregarAgenda();">Atualizar</button>
-        <div id="listarAgenda"></div>
+        <h2>Agenda de Aniversários</h2>
+        <div id="listarAniversario"></div>
     </section>
     
 
     <br><br>
-    <button onclick="" class="btn sair">Sair</button>
+    <button onclick="voltar();" class="btn">Voltar</button>
     <footer>
         Phonegap-2015
     </footer>

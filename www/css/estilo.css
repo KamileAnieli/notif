@@ -35,6 +35,8 @@ h1{
 .btn{
 	border:2px #FFE4B5 solid;
 	border-radius:5px;
+	height:30px;
+	margin:5px;
 }
 
 .salvar{
@@ -43,6 +45,11 @@ h1{
 
 .excluir{
 	color:#FF4500;
+}
+
+.add{
+	color:#FF4500;
+	background-color: #FFE4B5;
 }
 
 .sair{
